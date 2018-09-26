@@ -42,8 +42,8 @@ const int   daylightOffset_sec = 3600;
 #define SERVER_PORT 8454 
 #define serviceVersion 1
 const char* serviceURI = "temperature";
-const char* ssid = "AITIA_EMELET";//"Arrowhead-RasPi-IoT";
-const char* password = "sssgggaaa"; //"arrowhead";
+const char* ssid = "Arrowhead-RasPi-IoT";
+const char* password = "arrowhead";
 
 //TODO: modify these accordingly, and add additional service metadata at line 94 if needed!
 const char* serviceRegistry_addr = "http://arrowhead.tmit.bme.hu:8442";
@@ -152,10 +152,13 @@ void setup() {
   String pathString = String("/") + String(serviceURI);
   pathString.toCharArray(path, 20);
 
-  //starting webserver
+  //starting the webserver
   server.on(path, HTTP_GET, [](AsyncWebServerRequest *request){
     Serial.println("Received HTTP request, responding with:");
 
+    //TODO: do your sensor measurement
+    double temperature = 21.0;
+    
     //build the SenML format
     time_t now;
     time(&now);
@@ -168,12 +171,13 @@ void setup() {
     JsonArray& e = root.createNestedArray("e");
     JsonObject& meas = e.createNestedObject();
     meas["n"] = serviceName;
-    meas["v"] = 21.0;
+    meas["v"] = temperature;
     meas["t"] = 0;
 
     String response;
     root.prettyPrintTo(response);
     request->send(200, "application/json", response);
+    Serial.println(response);
   });
   server.begin();
 
