@@ -25,8 +25,8 @@
 #include <FS.h>
 
 //json parser library: https://arduinojson.org
-//NOTE: using version 5.1.13, since 6.x is in beta (but the Arduino IDE updates it!)
-//Make sure you are using 5.1.x within the Package Manager!
+//NOTE: using version 5.13.1, since 6.x is in beta (but the Arduino IDE updates it!)
+//Make sure you are using 5.13.x within the Package Manager!
 #include <ArduinoJson.h>
 
 //HTTP server library: https://github.com/me-no-dev/ESPAsyncWebServer
