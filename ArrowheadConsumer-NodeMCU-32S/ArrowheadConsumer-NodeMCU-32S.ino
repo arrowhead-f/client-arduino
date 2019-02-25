@@ -22,8 +22,8 @@
 #include <HTTPClient.h>
 
 //json parser library: https://arduinojson.org
-//NOTE: using version 5.1.13, since 6.x is in beta (but the Arduino IDE updates it!)
-//Make sure you are using 5.1.x within the Package Manager!
+//NOTE: using version 5.13.1, since 6.x is in beta (but the Arduino IDE updates it!)
+//Make sure you are using 5.13.x within the Package Manager!
 #include <ArduinoJson.h>
 
 const char* ssid = "Arrowhead-RasPi-IoT";
@@ -31,8 +31,9 @@ const char* password = "arrowhead";
 
 const char* orchestrator_addr = "http://arrowhead.tmit.bme.hu:8440";
 const char* systemName = "client1";
+const char* systemPort = "8080";
 const char* serviceDefinition = "IndoorTemperature";
-const char* interface1 = "json"; //if you need more add at line 
+const char* interface1 = "JSON_Insecure_SenML"; //if you need more add at line 68
 
 //we will store the service endpoint we receive here
 String endpoint;
@@ -60,7 +61,7 @@ void setup() {
   JsonObject& requesterSystem = root.createNestedObject("requesterSystem");
   requesterSystem["systemName"] = systemName;
   requesterSystem["address"] = WiFi.localIP().toString();
-  requesterSystem["port"] = "8080";
+  requesterSystem["port"] = systemPort;
   JsonObject& requestedService = root.createNestedObject("requestedService");
   requestedService["serviceDefinition"] = serviceDefinition;
   JsonArray& interfaces = requestedService.createNestedArray("interfaces");
