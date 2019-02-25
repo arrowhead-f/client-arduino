@@ -1,4 +1,4 @@
-#Arrowhead Provider sketch
+# Arrowhead Provider sketch
 
 This sketch does what an Arrowhead service provider system usually does: register its offered services in the ServiceRegistry, and then hosts the resource(s) as an HTTP server.
 
