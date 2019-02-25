@@ -48,6 +48,7 @@ const char* password = "arrowhead";
 //TODO: modify these accordingly, and add additional service metadata at line 94 if needed!
 const char* serviceRegistry_addr = "http://arrowhead.tmit.bme.hu:8442";
 const char* serviceDefinition = "IndoorTemperature";
+const char* serviceInterface = "JSON_Insecure_SenML";
 const char* systemName = "InsecureTemperatureSensor";
 
 //async webserver instance
@@ -86,7 +87,7 @@ void setup() {
   providedService["serviceDefinition"] = serviceDefinition;
   JsonObject& metadata = providedService.createNestedObject("metadata");
   JsonArray& interfaces = providedService.createNestedArray("interfaces");
-  interfaces.add("json");
+  interfaces.add(serviceInterface);
 
   //TODO: add service metadata if you need!
   metadata["unit"]="celsius";
@@ -121,7 +122,7 @@ void setup() {
   
         //need to remove our previous entry and then re-register
         HTTPClient http_remove;
-        http_remove.begin("http://192.168.42.1:8440/serviceregistry/remove"); //Specify destination for HTTP request
+        http_remove.begin(String(serviceRegistry_addr) + "/serviceregistry/remove"); //Specify destination for HTTP request
         http_remove.addHeader("Content-Type", "application/json"); //Specify content-type header
         int httpResponseCode_remove = http_remove.PUT(String(SRentry)); //Send the actual PUT request
         Serial.print("Removed previous entry with status code:");
@@ -131,7 +132,7 @@ void setup() {
         http_remove.end();  //Free resources
   
         HTTPClient http_renew;
-        http_renew.begin("http://192.168.42.1:8440/serviceregistry/register"); //Specify destination for HTTP request
+        http_renew.begin(String(serviceRegistry_addr) + "/serviceregistry/register"); //Specify destination for HTTP request
         http_renew.addHeader("Content-Type", "application/json"); //Specify content-type header
         int httpResponseCode_renew = http_renew.POST(String(SRentry)); //Send the actual POST request
         Serial.print("Re-registered with status code:");
@@ -170,7 +171,7 @@ void setup() {
     root["ver"]=1;
     JsonArray& e = root.createNestedArray("e");
     JsonObject& meas = e.createNestedObject();
-    meas["n"] = serviceName;
+    meas["n"] = String(serviceDefinition) + "_" + String (serviceInterface);
     meas["v"] = temperature;
     meas["t"] = 0;
 
